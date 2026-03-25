@@ -12,8 +12,12 @@ class EmployeesAddForm extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        if (this.state.name.length < 3 || !this.state.salary) return
-        this.props.onAdd(this.state.name, this.state.salary)
+        const { name, salary } = this.state
+        const nameRegExp = /^[А-Яа-яЁё\s]+$/;
+        if (name.length < 3 || !nameRegExp.test(name)) return
+        if (!salary || isNaN(salary) || Number(salary) <= 0) return
+
+        this.props.onAdd(name, salary)
 
         this.setState({
             name: '',

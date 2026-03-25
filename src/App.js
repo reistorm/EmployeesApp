@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from 'react';
+import './App.css'
+
+class WhoAmI extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            years: 27,
+            position: ''
+        }
+        // this.nextYear = this.nextYear.bind(this)
+    }
+
+    nextYear = () => {
+        this.setState(state => ({
+            years: state.years + 1
+        }))
+    }
+
+    commitInputChanges = (e, color) => {
+        console.log(color);
+        this.setState({
+            position: e.target.value
+        })
+    }
+
+    render() {
+        const { name, surname, link } = this.props;
+        const { years, position } = this.state
+        return (
+            <div>
+                <button onClick={this.nextYear}>+++</button>
+                {/* <button onClick={() => this.nextYear()}>+++</button>  если функция nextYear не стрелочная*/}
+                <h1>My name is {name}, surname - {surname},
+                    age - {years},
+                    position - {position}</h1>
+
+                {/* <h1>My name is {name.firstName}, surname - {surname}</h1> */}
+
+                {/* <h1>My name is {name()}, surname - {surname} </h1> */}
+                <a href={link}>My profile</a>
+                <form>
+                    <span>ВВедите должность</span>
+                    <input type="text" onChange={(e) => this.commitInputChanges(e, 'some color')} />
+                </form>
+            </div>
+        )
+    }
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <WhoAmI name="John" surname="Smith" link="facebook.com" />
+            <WhoAmI name="Alex" surname="Shepard" link="vk.com" />
+
+            {/* <WhoAmI name={{ firstName: "John" }} surname="Smith" link="facebook.com" />
+            <WhoAmI name={{ firstName: "Alex" }} surname="Shepard" link="vk.com" /> */}
+
+            {/* <WhoAmI name={() => {return 'John'}} surname="Smith" link="facebook.com" />
+            <WhoAmI name={() => {return 'Alex'}} surname="Shepard" link="vk.com" /> */}
+
+        </div>
+    )
 }
 
 export default App;

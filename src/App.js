@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import { React, Component } from 'react';
+import BootstrapTest from './BootstrapTest';
 import './App.css'
 
 class WhoAmI extends Component {
@@ -48,9 +49,86 @@ class WhoAmI extends Component {
     }
 }
 
+const DynamicGreating = (props) => {
+    return (
+        <div className={'mb-3 p-3 border border-' + props.color}>
+            {/* {props.children} */}
+            {
+                React.Children.map(props.children, child => {
+                    return React.cloneElement(child, { className: 'shadow p-3 m-3 border rounded' })
+                })
+            }
+        </div>
+    )
+}
+
+// композиция
+const HelloGreating = () => {
+    return (
+        <div style={{ 'width': '600px', 'margin': '0 auto' }}>
+            <DynamicGreating color={'primary'}>
+                <h2>Hello world!</h2>
+            </DynamicGreating>
+        </div>
+    )
+}
+
+const Message = (props) => {
+    return (
+        <h2>This counter is {props.counter}</h2>
+    )
+}
+
+class Counter extends Component {
+    state = {
+        counter: 0
+    }
+
+    changeCounter = () => {
+        this.setState(({ counter }) => ({
+            counter: counter + 1
+        }))
+    }
+
+    render() {
+        return (
+            <>
+                <button
+                    className={'btn btn-primary'}
+                    onClick={this.changeCounter}>
+                    Click me!
+                </button>
+                {this.props.render(this.state.counter)}
+            </>
+        )
+    }
+}
+
 function App() {
     return (
-        <div className="App">
+        // eslint-disable-next-line react/jsx-no-undef
+        <Wrapper>
+            <Counter render={counter => (
+                <Message counter={counter} />
+            )} />
+            <DynamicGreating color={'primary'}>
+                <h2>This well was hard</h2>
+                <h2>Hello world!</h2>
+            </DynamicGreating>
+            <BootstrapTest
+                left={
+                    <DynamicGreating color={'primary'}>
+                        <h2>This well was hard</h2>
+                        <h2>Hello world!</h2>
+                    </DynamicGreating>
+                }
+                right={
+                    <DynamicGreating color={'primary'}>
+                        <h2>Right!</h2>
+                        <h2>Hello world!</h2>
+                    </DynamicGreating>
+                }
+            />
             <WhoAmI name="John" surname="Smith" link="facebook.com" />
             <WhoAmI name="Alex" surname="Shepard" link="vk.com" />
 
@@ -60,7 +138,7 @@ function App() {
             {/* <WhoAmI name={() => {return 'John'}} surname="Smith" link="facebook.com" />
             <WhoAmI name={() => {return 'Alex'}} surname="Shepard" link="vk.com" /> */}
 
-        </div>
+        </Wrapper>
     )
 }
 
